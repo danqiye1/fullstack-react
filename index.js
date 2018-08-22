@@ -15,8 +15,11 @@ passport.use(
         clientID: keys.googleClientID,
         clientSecret: keys.googleClientSecret,
         callbackURL: '/auth/google/callback'
-    }, (accessToken) => {
-        console.log(accessToken);
+    }, (accessToken, refreshToken, profile, done) => {
+        // Handle Google OAuth return code
+        console.log('Access Token: ', accessToken);
+        console.log('Refresh Token: ', refreshToken);
+        console.log('Profile: ', profile);
     })
 );
 
@@ -24,5 +27,8 @@ passport.use(
 app.get('/auth/google', passport.authenticate('google', {
     scope: ['profile', 'email'] // ask for specific pieces of user's google account
 }));
+
+// OAuth callback handler with google return code.
+app.get('/auth/google/callback', passport.authenticate('google'))
 
 app.listen(PORT);
