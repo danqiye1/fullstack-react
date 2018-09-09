@@ -26,7 +26,8 @@ passport.use(
     new GoogleStrategy({
         clientID: keys.googleClientID,
         clientSecret: keys.googleClientSecret,
-        callbackURL: '/auth/google/callback'
+        callbackURL: '/auth/google/callback',
+        proxy: true // Bypass for Heroku proxy
     }, (profile, done) => {
 
         // This is asynchronous code for handling google OAuth return
