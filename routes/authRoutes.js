@@ -7,12 +7,17 @@ module.exports = (app) => {
     }));
 
     // OAuth callback handler with google return code.
-    app.get('/auth/google/callback', passport.authenticate('google'));
+    app.get('/auth/google/callback', 
+        passport.authenticate('google'),
+        (req, res) => {
+            res.redirect('/surveys');
+        }
+    );
 
     // Endpoint for logging out
     app.get('/api/logout', (req, res) => {
         req.logout();
-        res.send(req.user);
+        res.redirect('/');
     });
 
     // Endpoint for testing authentication flow
