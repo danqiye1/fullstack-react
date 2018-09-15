@@ -28,15 +28,15 @@ passport.use(
         clientSecret: keys.googleClientSecret,
         callbackURL: '/auth/google/callback',
         proxy: true // Bypass for Heroku proxy
-    }, async (profile, done) => {
+    }, async (accessToken, refreshToken, profile, done) => {
         const existingUser = await User.findOne({ googleId: profile.id })
-            if (existingUser) {
-                // Already have a record with given profile ID, tell passport we are done.
-                done(null, existingUser);
-            } else {
-                // User does not exist, make a new user, also asynchronous
-                const user = await new User({ googleId: profile.id }).save()
-                done(null, user);
-            }
+        if (existingUser) {
+            // Already have a record with given profile ID, tell passport we are done.
+            done(null, existingUser);
+        } else {
+            // User does not exist, make a new user, also asynchronous
+            const user = await new User({ googleId: profile.id }).save()
+            done(null, user);
+        }
     })
 );
